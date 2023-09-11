@@ -11,10 +11,10 @@ const BurgerConstructor = (props) => {
   const bun = useMemo(() => {
     return props.data.find((item) => item.type === 'bun');
   }, [props]);
-  const sauce = React.useMemo(() => {
+  const sauce = useMemo(() => {
     return props.data.find(item => item.type === 'sauce')
   }, [props]);
-  const main = React.useMemo(() => {
+  const main = useMemo(() => {
     return props.data.filter(item => item.type === 'filling')
   }, [props]);
 
