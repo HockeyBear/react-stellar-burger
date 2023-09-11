@@ -29,15 +29,15 @@ const BurgerConstructor = (props) => {
 
   return (
     <section className={constructorStyles.section}>
-      <div className={constructorStyles.box + ' custom-scroll'}>
-        <div className={constructorStyles.ingredient}>
+      <div className={constructorStyles.container + ' custom-scroll mt-25 pl-4'}>
+        <div className={constructorStyles.ingredientCon}>
           {bun && <ConstructorElement type="top" isLocked={true}
             text={bun.name + "(верх)"}
             price={bun.price}
             thumbnail={bun.image}
           />}
         </div>
-        <div className={constructorStyles.ingredient}>
+        <div className={constructorStyles.ingredientCon}>
           <DragIcon type="primary" />
           {bun && <ConstructorElement text={sauce.name}
             price={sauce.price}
@@ -45,15 +45,16 @@ const BurgerConstructor = (props) => {
           />}
         </div>
         {main.map(item => <RenderedIngredient key={item._id} {...item} />)}
-        <div className={constructorStyles.ingredient}>
+        <div className={constructorStyles.ingredientCon}>
           {bun && <ConstructorElement type="bottom" isLocked={true}
             text={bun.name + "(низ)"}
             price={bun.price}
             thumbnail={bun.image}
           />}
         </div>
+        
       </div>
-      <div className={constructorStyles.ordering}>
+      <div className={constructorStyles.order + ' mt-10 mr-4'}>
         <div className={constructorStyles.sum}>
           <p className="text text_type_main-large">{totalPrice}</p>
           <CurrencyIcon type="primary" />

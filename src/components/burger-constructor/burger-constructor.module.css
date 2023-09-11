@@ -2,3 +2,24 @@
   width: 600px;
   height: 912px;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: scroll;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+.ingredientCon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  column-gap: 13px;
+}
+
+.order {
+  composes: ingredientCon;
+}
