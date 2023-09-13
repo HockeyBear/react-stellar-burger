@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import ingStyles from './burger-ingredients.module.css';
 import { Counter, Tab, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientPropType from '../../utils/prop-types';
@@ -18,14 +18,24 @@ function Ingredient (data) {
   )
 }
 
-function BurgerIngredients(props) {
+function BurgerIngredients(burger) {
   const [current, setCurrent] = useState('bun');
 
-  const handleClickTab = (evt) => {
-    setCurrent(evt)
-  }
+  const refIng = {
+    'bun': useRef(null),
+    'sauce': useRef(null),
+    'filling': useRef(null)
+  };
 
-  const [...data] = props.data;
+  const handleClickTab = (tab) => {
+    setCurrent(tab);
+    if (refIng[tab].current) {
+      refIng[tab].current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+
+  const [...data] = burger.data;
   const bun = data.filter(item => item.type === 'bun');
   const sauce = data.filter(item => item.type === 'sauce');
   const filling = data.filter(item => item.type === 'main');
@@ -34,21 +44,21 @@ function BurgerIngredients(props) {
     <section className={ingStyles.section}>
       <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
       <div className={`${ingStyles.tab} pt-5 pb-10`}>
-        <Tab value="bun" active={current === "bun"} onClick={handleClickTab}>Булки</Tab>
-        <Tab value="sauce" active={current === "sauce"} onClick={handleClickTab}>Соусы</Tab>
-        <Tab value="filling" active={current === "filling"} onClick={handleClickTab}>Начинки</Tab>
+        <Tab value="bun" active={current === "bun"} onClick={() => handleClickTab('bun')}>Булки</Tab>
+        <Tab value="sauce" active={current === "sauce"} onClick={() => handleClickTab('sauce')}>Соусы</Tab>
+        <Tab value="filling" active={current === "filling"} onClick={() => handleClickTab('filling')}>Начинки</Tab>
       </div>
       <div className={ingStyles.ingredients}>
         <div className={`${ingStyles.ingredient} custom-scroll`}>
-          <h2 className="text text_type_main-medium">Булки</h2>
+          <h2 className="text text_type_main-medium" ref={refIng['bun']}>Булки</h2>
           <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
             {bun.map(item => <Ingredient key={item._id} {...item} />)}
           </div>
-          <h2 className="text text_type_main-medium">Соусы</h2>
+          <h2 className="text text_type_main-medium" ref={refIng['sauce']}>Соусы</h2>
           <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
             {sauce.map(item => <Ingredient key={item._id} {...item} />)}
           </div>
-          <h2 className="text text_type_main-medium">Начинки</h2>
+          <h2 className="text text_type_main-medium" ref={refIng['filling']}>Начинки</h2>
           <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
             {filling.map(item => <Ingredient key={item._id} {...item} />)} 
           </div>
