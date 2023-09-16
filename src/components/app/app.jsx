@@ -1,38 +1,79 @@
 import styles from "./app.module.css";
-import { data, urlData } from "../../utils/data";
-import api from "../../utils/api";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useEffect, useState } from "react";
 import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+
+const URL_API = 'https://norma.nomoreparties.space/api/ingredients';
+
 
 function App() {
-
-  const [data, setData] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [state, setState] = useState({
+    ingredientData: [],
+    isLoading: true,
+    hasError: false,
+  });
+  const [currentItem, setCurrentItem] = useState(null);
+  const [order, setOrder] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getBurger = async () => {
       try {
-        const response = await fetch(urlData);
-        const data = await response.json();
-        setData(data);
+        setState({ ...state, isLoading: true, hasError: false });
+        fetch(URL_API)
+        .then((res) => res.json())
+        .then((data) => {
+          setState({ ...state, ingredientData: data.data });
+        });
       } catch (error) {
-        console.error('Ошибка при извлечении данных:', error)
+        console.log('Ошибка при получении данных', error.message);
+      } finally {
+        setState({ ...state, isLoading: false});
       }
     };
-    fetchData();
+    getBurger();
   }, []);
+
+  const handleClick = (id) => {
+    if (id) {
+      setCurrentItem(id);
+    }
+  };
+
+  const addToOrder = () => {
+    setOrder(true);
+  };
+  const closeModal = () => {
+    setOrder(false);
+    setCurrentItem(null);
+  };
 
   return (
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <BurgerIngredients data={data}/>
-        <BurgerConstructor data={data} closeModal={setModalOpen}/>
+        {state.isLoading ? (
+          <p>Загрузка данных...</p>
+        ) : (
+          <>
+            <BurgerIngredients data={state.ingredientData} handleClick={handleClick}/> 
+            <BurgerConstructor data={state.ingredientData} openModal={addToOrder}/>
+          </>
+        )}
       </main>
-      [modalOpen && <Modal closeModal={setModalOpen}/>]
+      {order && (
+        <Modal closeModal={currentItem}>
+          <OrderDetails />
+        </Modal>
+      )}
+      {currentItem && (
+        <Modal closeModal={closeModal}>
+          <IngredientDetails ingredient={currentItem} />
+        </Modal>
+      )}
     </div>
   );
 }

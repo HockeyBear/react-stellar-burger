@@ -1,0 +1,36 @@
+.con {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  box-sizing: border-box;
+  background-color: #1c1c21;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  width: 720px;
+  height: 718px;
+  border-radius: 32px;
+  text-align: center;
+}
+
+.closeButton {
+  width: 24px;
+  height: 24px;
+  background: none;
+  opacity: 1;
+  border: none;
+  padding: 0;
+  transition: opacity 0.3s ease-in;
+  cursor: pointer;
+}
+
+.text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 640px;
+  height: 64px;
+}
+

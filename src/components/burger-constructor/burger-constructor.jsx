@@ -1,22 +1,22 @@
-import React, { Component, useMemo } from "react";
+import React, { useMemo } from "react";
 import constructorStyles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientPropType from '../../utils/prop-types';
 import PropTypes from 'prop-types';
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = ({ data, openModal}) => {
   
-  const totalPrice = props.data.reduce((sum, item) => sum + item.price, 0);
+  const totalPrice = data.reduce((sum, item) => sum + item.price, 0);
 
   const bun = useMemo(() => {
-    return props.data.find((item) => item.type === 'bun');
-  }, [props]);
-  const sauce = useMemo(() => {
-    return props.data.find(item => item.type === 'sauce')
-  }, [props]);
-  const main = useMemo(() => {
-    return props.data.filter(item => item.type === 'filling')
-  }, [props]);
+    return data && data.find((item) => item.type === 'bun');
+}, [data]);
+const sauce = useMemo(() => {
+    return data && data.find(item => item.type === 'sauce')
+}, [data]);
+const main = useMemo(() => {
+    return data && data.filter(item => item.type === 'filling')
+}, [data]);
 
   const RenderedIngredient = (item, type) => {
     return (
@@ -59,7 +59,7 @@ const BurgerConstructor = (props) => {
           <p className="text text_type_main-large">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large" onClick={() => props.setIsOpen(true)}>
+        <Button htmlType="button" type="primary" size="large" onClick={openModal}>
           Оформить заказ
         </Button>
       </div>
@@ -68,7 +68,8 @@ const BurgerConstructor = (props) => {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired
+  data: PropTypes.arrayOf(ingredientPropType).isRequired,
+  openModal: PropTypes.func.isRequired,
 }
 
 export default BurgerConstructor;
