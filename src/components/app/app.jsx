@@ -3,9 +3,6 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useEffect, useState } from "react";
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 
 const URL_API = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -16,8 +13,6 @@ function App() {
     isLoading: true,
     hasError: false,
   });
-  const [currentItem, setCurrentItem] = useState(null);
-  const [order, setOrder] = useState(false);
 
   useEffect(() => {
     const getBurger = async () => {
@@ -26,7 +21,7 @@ function App() {
         fetch(URL_API)
         .then((res) => res.json())
         .then((data) => {
-          setState({ ...state, ingredientData: data.data });
+          setState({ ...state, ingredientData: data.data, isLoading: false });
         });
       } catch (error) {
         console.log('Ошибка при получении данных', error.message);
@@ -37,20 +32,6 @@ function App() {
     getBurger();
   }, []);
 
-  const handleClick = (id) => {
-    if (id) {
-      setCurrentItem(id);
-    }
-  };
-
-  const addToOrder = () => {
-    setOrder(true);
-  };
-  const closeModal = () => {
-    setOrder(false);
-    setCurrentItem(null);
-  };
-
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -59,21 +40,11 @@ function App() {
           <p>Загрузка данных...</p>
         ) : (
           <>
-            <BurgerIngredients data={state.ingredientData} handleClick={handleClick}/> 
-            <BurgerConstructor data={state.ingredientData} openModal={addToOrder}/>
+            <BurgerIngredients data={state.ingredientData}/> 
+            <BurgerConstructor data={state.ingredientData}/>
           </>
         )}
       </main>
-      {order && (
-        <Modal closeModal={currentItem}>
-          <OrderDetails />
-        </Modal>
-      )}
-      {currentItem && (
-        <Modal closeModal={closeModal}>
-          <IngredientDetails ingredient={currentItem} />
-        </Modal>
-      )}
     </div>
   );
 }

@@ -1,34 +1,15 @@
 import { useState, useRef, useMemo } from "react";
 import ingStyles from './burger-ingredients.module.css';
-import { Counter, Tab, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientPropType from '../../utils/prop-types';
 import PropTypes from 'prop-types';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import Ingredient from "./ingredient/ingredient";
 
-const BurgerIngredients = (props) => {
+const BurgerIngredients = (ingredient) => {
   const [current, setCurrent] = useState('bun');
-  const [modal, setModal] = useState(false);
-  const [cardModal, setCardModal] = useState({})
-
-  const createCart = (item) => {
-    const modalOpen = (item) => {
-      setCardModal(item);
-      setModal(true);
-    }
-
-    return(
-      <div className={ingStyles.ingredient_card} key={item._id} onClick={() => modalOpen(item)}>
-        <Counter count={1} size="default" extraClass="m-1" />
-        <img src={item.image} alt={item.name} />
-        <div>
-          <p className="text text_type_digits-default">{item.price}</p>
-          <CurrencyIcon type="primary" />
-        </div>
-        <p className="text text_type_main-default">{item.name}</p>
-      </div>
-    )
-  };
+  const [currentItem, setCurrentItem] = useState(null)
 
   const refIng = {
     'bun': useRef(null),
@@ -44,41 +25,94 @@ const BurgerIngredients = (props) => {
   };
 
   const bun = useMemo(() => {
-    return props.data.filter(item => item.type === 'bun');
-  }, [props]);
+    return ingredient.data.filter(item => item.type === 'bun');
+  }, [ingredient]);
   const sauce = useMemo(() => {
-    return props.data.filter(item => item.type === 'sauce');
-  }, [props]);
+    return ingredient.data.filter(item => item.type === 'sauce');
+  }, [ingredient]);
   const filling = useMemo(() => {
-    return props.data.filter(item => item.type === 'main');
-  }, [props]);
+    return ingredient.data.filter(item => item.type === 'main');
+  }, [ingredient]);
 
   return (
-    <section className={ingStyles.section}>
-      <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
-      <div className={`${ingStyles.tab} pt-5 pb-10`}>
-      <Tab value="bun" active={current === "bun"} onClick={() => handleClickTab('bun')}>Булки</Tab>
-      <Tab value="sauce" active={current === "sauce"} onClick={() => handleClickTab('sauce')}>Соусы</Tab>
-      <Tab value="filling" active={current === "filling"} onClick={() => handleClickTab('filling')}>Начинки</Tab>
-      </div>
-      <div className={ingStyles.ingredients}>
-        <div className={`${ingStyles.ingredient} custom-scroll`}>
-          <h2 className="text text_type_main-medium" ref={refIng['bun']}>Булки</h2>
-          <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
-            {bun.map(item => createCart(item))}
-          </div>
-          <h2 className="text text_type_main-medium" ref={refIng['sauce']}>Соусы</h2>
-          <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
-            {sauce.map(item => createCart(item))}
-          </div>
-          <h2 className="text text_type_main-medium" ref={refIng['filling']}>Начинки</h2>
-          <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
-            {filling.map(item => createCart(item))} 
+    <>
+      <section className={ingStyles.section}>
+        <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
+        <div className={`${ingStyles.tab} pt-5 pb-10`}>
+        <Tab 
+        value="bun" 
+        active={current === "bun"} 
+        onClick={() => handleClickTab('bun')}
+        >
+          Булки
+        </Tab>
+        <Tab 
+        value="sauce" 
+        active={current === "sauce"} 
+        onClick={() => handleClickTab('sauce')}
+        >
+          Соусы
+        </Tab>
+        <Tab 
+        value="filling" 
+        active={current === "filling"} 
+        onClick={() => handleClickTab('filling')}
+        >
+          Начинки
+        </Tab>
+        </div>
+        <div className={ingStyles.ingredients}>
+          <div className={`${ingStyles.ingredient} custom-scroll`}>
+            <h2 className="text text_type_main-medium" ref={refIng["bun"]}>
+              Булки
+            </h2>
+            <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
+              {bun.map((item) => (
+                <Ingredient
+                  item={item}
+                  key={item._id}
+                  onClick={setCurrentItem}
+                />
+              ))}
+            </div>
+            <h2 className="text text_type_main-medium" ref={refIng["sauce"]}>
+              Соусы
+            </h2>
+            <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
+              {sauce.map((item) => (
+                <Ingredient
+                  item={item}
+                  key={item._id}
+                  onClick={setCurrentItem}
+                />
+              ))}
+            </div>
+            <h2 className="text text_type_main-medium" ref={refIng["filling"]}>
+              Начинки
+            </h2>
+            <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
+              {filling.map((item) => (
+                <Ingredient
+                  item={item}
+                  key={item._id}
+                  onClick={setCurrentItem}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      {modal && <Modal closeModal={setModal}><IngredientDetails {...cardModal} /></Modal>}
-    </section>
+        {/* {modal && (
+          <Modal closeModal={setModal} title='Детали игредиента'>
+            <IngredientDetails {...cardModal} />
+          </Modal>
+        )} */}
+      </section>
+      {currentItem && (
+        <Modal closeModal={() => setCurrentItem(null)} title='Детали Ингредиента'>
+          <IngredientDetails ingredient={currentItem} />
+        </Modal>
+      )}
+    </>
   )
 }
 

@@ -4,8 +4,7 @@ import ingredientPropType from '../../utils/prop-types';
 const IngredientDetails = ({ ingredient }) => {
   return (
     <>
-      <h2 className={ingredientDetails.title + " text text_type_main-large mt-15 ml-10"}>Детали ингредиента</h2>
-      <div className={ingredientDetails.con}>
+      <div className={`${ingredientDetails.con} pl-25 pr-25 pb-15`}>
         <img src={ingredient.image_large} alt={ingredient.name} />
         <p className="text text_type_main-medium mt-4">{ingredient.name}</p>
         <div className={ingredientDetails.details}>

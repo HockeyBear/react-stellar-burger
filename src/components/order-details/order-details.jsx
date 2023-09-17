@@ -4,7 +4,7 @@ import orderAccepted from '../images/done.svg'
 
 const OrderDetails = () => {
   return (
-    <div className={`${orderStyle.con} pb-30 pt-4`}>
+    <div className={`${orderStyle.con} pb-30 pt-4 pl-25 pr-25`}>
       <h2 className={`${orderStyle.text} text text_type_digits-large mb-8`}>034536</h2>
       <p className={"text text_type_main-medium"}>
         идентификатор заказа
