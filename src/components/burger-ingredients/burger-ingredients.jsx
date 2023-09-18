@@ -101,11 +101,6 @@ const BurgerIngredients = (ingredient) => {
             </div>
           </div>
         </div>
-        {/* {modal && (
-          <Modal closeModal={setModal} title='Детали игредиента'>
-            <IngredientDetails {...cardModal} />
-          </Modal>
-        )} */}
       </section>
       {currentItem && (
         <Modal closeModal={() => setCurrentItem(null)} title='Детали Ингредиента'>
