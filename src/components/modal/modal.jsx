@@ -23,9 +23,8 @@ const Modal = ({ closeModal, children, title }) => {
   }, [closeModal]);
 
   return createPortal (
-    <div>
-      <ModalOverlay>
-        <div className={modalStyles.con}>
+    <>
+      <div className={modalStyles.con}>
           <div className={`${modalStyles.text} pt-10 pr-10 pl-10`}>
             <h2 className={'text text_type_main-large'}>{title}</h2>
             <button type="button" className={modalStyles.closeButton} onClick={closeModal}>
@@ -34,8 +33,8 @@ const Modal = ({ closeModal, children, title }) => {
           </div>
           {children}
         </div>
-      </ModalOverlay>
-    </div>,modalRoot
+      <ModalOverlay closeModal={closeModal} />
+    </>,modalRoot
   );
 };
 

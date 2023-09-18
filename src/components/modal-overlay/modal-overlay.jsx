@@ -8,7 +8,7 @@ const ModalOverlay = ({ children, closeModal }) => {
 }
 
 ModalOverlay.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   closeModal: PropTypes.func.isRequired
 }
 

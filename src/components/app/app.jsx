@@ -6,6 +6,15 @@ import { useEffect, useState } from "react";
 
 const URL_API = 'https://norma.nomoreparties.space/api/ingredients';
 
+const checkResponse = async (res) => {
+  if (res.ok) {
+    return res.json();
+  } else {
+    const error = await res.text();
+    return Promise.reject(error);
+  }
+};
+
 
 function App() {
   const [state, setState] = useState({
@@ -19,7 +28,7 @@ function App() {
       try {
         setState({ ...state, isLoading: true, hasError: false });
         fetch(URL_API)
-        .then((res) => res.json())
+        .then(checkResponse)
         .then((data) => {
           setState({ ...state, ingredientData: data.data, isLoading: false });
         });

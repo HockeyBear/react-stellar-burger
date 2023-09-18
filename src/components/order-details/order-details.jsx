@@ -1,5 +1,5 @@
 import orderStyle from './order-details.module.css';
-import orderAccepted from '../images/done.svg'
+import orderAccept from '../../images/done.svg';
 
 
 const OrderDetails = () => {
@@ -9,7 +9,7 @@ const OrderDetails = () => {
       <p className={"text text_type_main-medium"}>
         идентификатор заказа
       </p>
-      <img className={`${orderStyle.img} mt-15 mb-15`} src={orderAccepted} alt="Order accepted" />
+      <img className={`${orderStyle.img} mt-15 mb-15`} src={orderAccept} alt="Order accepted" />
       <p className={"text text_type_main-default"}>
         Ваш заказ начали готовить
       </p>
