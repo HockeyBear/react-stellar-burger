@@ -1,0 +1,31 @@
+.con {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+.title {
+    align-self: flex-start;
+    justify-self: start;
+}
+  
+.details {
+    width: 520px;
+    margin-top: 32px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+.img {
+    width: 480px;
+    height: 240px;
+}

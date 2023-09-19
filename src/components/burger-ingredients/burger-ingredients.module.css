@@ -1,0 +1,20 @@
+.section {
+  width: 600px;
+  height: 912px;
+}
+
+.tab {
+  display: flex;
+}
+
+.ingredient {
+  max-height: calc(100vh - 285px);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.ingredient_con {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 32px
+}
