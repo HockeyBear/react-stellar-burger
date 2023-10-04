@@ -1,41 +1,33 @@
+import React, { useEffect, useState } from "react";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { useEffect, useState } from "react";
+import { checkResponse } from "../../utils/API";
+import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
 
 const URL_API = 'https://norma.nomoreparties.space/api/ingredients';
 
-const checkResponse = async (res) => {
-  if (res.ok) {
-    return res.json();
-  } else {
-    const error = await res.text();
-    return Promise.reject(error);
-  }
-};
-
-
 function App() {
-  const [state, setState] = useState({
-    ingredientData: [],
-    isLoading: true,
-    hasError: false,
-  });
+  const [ ingredientData, setIngredientData ] = useState([]);
+  const [ constructorBurgers, setConstructorBurgers ] = useState([]);
+  const [ consturctorBun, setConstructorBun ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ hasError, setHasError ] = useState(false);
 
   useEffect(() => {
     const getBurger = async () => {
       try {
-        setState({ ...state, isLoading: true, hasError: false });
-        fetch(URL_API)
-        .then(checkResponse)
-        .then((data) => {
-          setState({ ...state, ingredientData: data.data, isLoading: false });
-        });
+        setIsLoading(true);
+        setHasError(false);
+        const response = await fetch(URL_API);
+        const res = await checkResponse(response);
+        setIngredientData(res.data);
+        setIsLoading(false);
       } catch (error) {
         console.log('Ошибка при получении данных', error.message);
-      } finally {
-        setState({ ...state, isLoading: false});
+        setHasError(true);
+        setIsLoading(false);
       }
     };
     getBurger();
@@ -45,14 +37,26 @@ function App() {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        {state.isLoading ? (
-          <p>Загрузка данных...</p>
-        ) : (
-          <>
-            <BurgerIngredients data={state.ingredientData}/> 
-            <BurgerConstructor data={state.ingredientData}/>
-          </>
-        )}
+        <IngredientsContext.Provider value={{ ingredientData, setIngredientData }}>
+          <ConstructorContext.Provider value={{ constructorBurgers, setConstructorBurgers }}>
+            <BunContext.Provider value={{ consturctorBun, setConstructorBun }}>
+              {isLoading ? (
+                <p>Загрузка данных...</p>
+              ) : (
+                <>
+                  {hasError ? (
+                    <p>Произошла ошибка при загрузке данных.</p>
+                  ) : (
+                    <>
+                      <BurgerIngredients data={ingredientData}/> 
+                      <BurgerConstructor data={ingredientData}/>
+                    </>
+                  )}
+                </>
+              )}
+            </BunContext.Provider>
+          </ConstructorContext.Provider>
+        </IngredientsContext.Provider>
       </main>
     </div>
   );
