@@ -9,12 +9,15 @@ import { ConstructorContext, IngredientsContext, BunContext } from "../../servic
 import { orderUrl } from "../../utils/constants";
 import { checkResponse } from "../../utils/API";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
   const { ingredientsData } = useContext(IngredientsContext);
   const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
   const { consturctorBun, setConstructorBun } = useContext(BunContext);
-  const [order, setOrder] = useState(false);
-  
+  const [order, setOrder] = useState();
+  const [modalOrder, setModalOrder] = useState(false);
+
+  const hasSelectedBun = consturctorBun !== null;
+
   const totalPrice = useMemo(() => {
     const burgerPrice = constructorBurgers? constructorBurgers.reduce((sum, curr) => {
       return sum + curr.price;
@@ -32,29 +35,21 @@ const BurgerConstructor = ({ data }) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        ingredents: burger
+        ingredients: burger
       })
+      
     }).then(result => checkResponse(result))
       .then(result => {
         setOrder(result.order);
+        setModalOrder(true);
       })
   }
 
-  // const bun = useMemo(() => {
-  //   return data && data.find((item) => item.type === 'bun');
-  // }, [data]);
-  // const sauce = useMemo(() => {
-  //   return data && data.find(item => item.type === 'sauce')
-  // }, [data]);
-  // const main = useMemo(() => {
-  //   return data && data.filter(item => item.type === 'filling')
-  // }, [data]);
-
-  const RenderedIngredient = (item, type) => {
+  const RenderedIngredient = (item) => {
     return (
       <div key={item._id}>
         <DragIcon type="primary" />
-        <ConstructorElement text={type.name} price={type.price} thumbnail={type.image} />
+        <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
       </div>
     )
   }
@@ -67,7 +62,7 @@ const BurgerConstructor = ({ data }) => {
             className={constructorStyles.container + " custom-scroll mt-25 pl-4"}
           >
             <div className={constructorStyles.ingredientCon}>
-              {consturctorBun && <ConstructorElement 
+              {hasSelectedBun && <ConstructorElement 
               type="top" 
               isLocked={true}
               text={consturctorBun.name + "(верх)"}
@@ -75,9 +70,9 @@ const BurgerConstructor = ({ data }) => {
               thumbnail={consturctorBun.image}
               />}
             </div>
-            {constructorBurgers.map((item, type) => <RenderedIngredient key={type} {...item} />)}
+            {constructorBurgers.map((item, index) => <RenderedIngredient key={index} {...item} />)}
             <div className={constructorStyles.ingredientCon}>
-              {consturctorBun && <ConstructorElement 
+              {hasSelectedBun && <ConstructorElement 
               type="bottom" 
               isLocked={true}
               text={consturctorBun.name + "(низ)"}
@@ -101,9 +96,9 @@ const BurgerConstructor = ({ data }) => {
             </Button>
           </div>
         </section>
-        {order && (
-          <Modal closeModal={() => setOrder(false)}>
-            <OrderDetails />
+        {modalOrder && (
+          <Modal closeModal={() => setModalOrder(false)}>
+            <OrderDetails order={order} />
           </Modal>
         )}
       </>

@@ -14,16 +14,8 @@ const BurgerIngredients = (ingredient) => {
   const [currentItem, setCurrentItem] = useState(null)
 
   const { ingredientsData } = useContext(IngredientsContext);
-  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
-  const { consturctorBun, setConstructorBun } = useContext(BunContext);
-
-  const clickIngredient = (ingredient) => {
-    if (ingredient.type === BUN) {
-      setConstructorBun(ingredient);
-    } else {
-      setConstructorBurgers([...constructorBurgers, ingredient]);
-    }
-  }
+  // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
+  // const { consturctorBun, setConstructorBun } = useContext(BunContext);
 
   const refIng = {
     'bun': useRef(null),
