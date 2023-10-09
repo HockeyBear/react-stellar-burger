@@ -6,7 +6,7 @@ import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktiku
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
-import { orderUrl } from "../../utils/constants";
+import { BASE_URL } from "../../utils/constants";
 import { checkResponse } from "../../utils/API";
 
 const BurgerConstructor = () => {
@@ -29,7 +29,7 @@ const BurgerConstructor = () => {
   const orderClick = () => {
     const burger = constructorBurgers.map(item => item._id);
     burger.push(consturctorBun._id);
-    return fetch(orderUrl, {
+    return fetch(`${BASE_URL}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,6 +43,10 @@ const BurgerConstructor = () => {
         setOrder(result.order);
         setModalOrder(true);
       })
+      .catch(error => {
+        console.log('Произошла ошибка при отправке запроса:', error.message);
+        alert('Произошла ошибка при отправке запроса. Пожалуйста, попробуйте еще раз.');
+      });
   }
 
   const RenderedIngredient = (item) => {

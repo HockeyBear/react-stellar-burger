@@ -5,11 +5,10 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { checkResponse } from "../../utils/API";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
-
-const URL_API = 'https://norma.nomoreparties.space/api/ingredients';
+import { BASE_URL } from "../../utils/constants";
 
 function App() {
-  const [ ingredientData, setIngredientData ] = useState([]);
+  const [ data, setData ] = useState([]);
   const [ constructorBurgers, setConstructorBurgers ] = useState([]);
   const [ consturctorBun, setConstructorBun ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
@@ -20,14 +19,15 @@ function App() {
       try {
         setIsLoading(true);
         setHasError(false);
-        const response = await fetch(URL_API);
+        const response = await fetch(`${BASE_URL}/ingredients`);
         const res = await checkResponse(response);
-        setIngredientData(res.data);
+        setData(res.data);
         setIsLoading(false);
       } catch (error) {
         console.log('Ошибка при получении данных', error.message);
         setHasError(true);
         setIsLoading(false);
+        alert('Произошла ошибка при отправке запроса. Пожалуйста, попробуйте еще раз.');
       }
     };
     getBurger();
@@ -36,10 +36,10 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <main className={styles.main}>
-        <IngredientsContext.Provider value={{ ingredientData, setIngredientData }}>
+        <IngredientsContext.Provider value={{ data, setData }}>
           <ConstructorContext.Provider value={{ constructorBurgers, setConstructorBurgers }}>
             <BunContext.Provider value={{ consturctorBun, setConstructorBun }}>
+              {data && <main className={styles.main}>
               {isLoading ? (
                 <p>Загрузка данных...</p>
               ) : (
@@ -48,16 +48,17 @@ function App() {
                     <p>Произошла ошибка при загрузке данных.</p>
                   ) : (
                     <>
-                      <BurgerIngredients data={ingredientData}/> 
-                      <BurgerConstructor data={ingredientData}/>
+                      <BurgerIngredients /> 
+                      <BurgerConstructor />
                     </>
                   )}
                 </>
               )}
+              </main> 
+              }
             </BunContext.Provider>
           </ConstructorContext.Provider>
         </IngredientsContext.Provider>
-      </main>
     </div>
   );
 }

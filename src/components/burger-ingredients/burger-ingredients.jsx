@@ -13,7 +13,7 @@ const BurgerIngredients = (ingredient) => {
   const [current, setCurrent] = useState('bun');
   const [currentItem, setCurrentItem] = useState(null)
 
-  const { ingredientsData } = useContext(IngredientsContext);
+  const { data } = useContext(IngredientsContext);
   // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
   // const { consturctorBun, setConstructorBun } = useContext(BunContext);
 
@@ -31,17 +31,17 @@ const BurgerIngredients = (ingredient) => {
   };
 
   const bun = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'bun');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'bun');
+  }, [data]);
   const sauce = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'sauce');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'sauce');
+  }, [data]);
   const filling = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'main');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'main');
+  }, [data]);
 
   return (
-    <IngredientsContext.Provider value={ingredientsData}>
+    <IngredientsContext.Provider value={data}>
       <>
       <section className={ingStyles.section}>
         <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
