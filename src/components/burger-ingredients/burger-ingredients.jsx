@@ -9,7 +9,7 @@ import Ingredient from "./ingredient/ingredient";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
 import { BUN, SAUCE, FILLING } from "../../utils/constants";
 
-const BurgerIngredients = (ingredient) => {
+const BurgerIngredients = () => {
   const [current, setCurrent] = useState('bun');
   const [currentItem, setCurrentItem] = useState(null)
 

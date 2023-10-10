@@ -62,28 +62,28 @@ const BurgerConstructor = () => {
     <IngredientsContext.Provider value={ingredientsData}>
       <>
         <section className={constructorStyles.section}>
+          <div className={constructorStyles.ingredientCon + " mt-25"}>
+            {hasSelectedBun && <ConstructorElement 
+            type="top" 
+            isLocked={true}
+            text={consturctorBun.name + "(верх)"}
+            price={consturctorBun.price}
+            thumbnail={consturctorBun.image}
+            />}
+          </div>
           <div
-            className={constructorStyles.container + " custom-scroll mt-25 pl-4"}
+            className={constructorStyles.container + " custom-scroll pl-4"}
           >
-            <div className={constructorStyles.ingredientCon}>
-              {hasSelectedBun && <ConstructorElement 
-              type="top" 
-              isLocked={true}
-              text={consturctorBun.name + "(верх)"}
-              price={consturctorBun.price}
-              thumbnail={consturctorBun.image}
-              />}
-            </div>
             {constructorBurgers.map((item, index) => <RenderedIngredient key={index} {...item} />)}
-            <div className={constructorStyles.ingredientCon}>
-              {hasSelectedBun && <ConstructorElement 
-              type="bottom" 
-              isLocked={true}
-              text={consturctorBun.name + "(низ)"}
-              price={consturctorBun.price}
-              thumbnail={consturctorBun.image}
-              />}
-            </div>
+          </div>
+          <div className={`${constructorStyles.ingredientCon} ${constructorStyles.lastIngredientCon}`}>
+            {hasSelectedBun && <ConstructorElement 
+            type="bottom" 
+            isLocked={true}
+            text={consturctorBun.name + "(низ)"}
+            price={consturctorBun.price}
+            thumbnail={consturctorBun.image}
+            />}
           </div>
           <div className={constructorStyles.order + " mt-10 mr-4"}>
             <div className={constructorStyles.sum}>

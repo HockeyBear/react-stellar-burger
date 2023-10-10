@@ -1,5 +1,6 @@
 import orderStyle from './order-details.module.css';
 import orderAccept from '../../images/done.svg';
+import PropTypes from 'prop-types';
 
 
 const OrderDetails = (item) => {
@@ -18,6 +19,10 @@ const OrderDetails = (item) => {
       </p>
     </div>
   )
+}
+
+OrderDetails.propTypes = {
+  item: PropTypes.number.isRequired
 }
 
 export default OrderDetails;
