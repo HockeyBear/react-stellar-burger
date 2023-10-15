@@ -11,7 +11,7 @@ import { BUN, SAUCE, FILLING } from "../../utils/constants";
 
 const BurgerIngredients = () => {
   const [current, setCurrent] = useState('bun');
-  const [currentItem, setCurrentItem] = useState(null)
+  const [currentItem, setCurrentItem] = useState(false)
 
   const { data } = useContext(IngredientsContext);
   // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
@@ -110,7 +110,7 @@ const BurgerIngredients = () => {
         </div>
       </section>
       {currentItem && (
-        <Modal closeModal={() => setCurrentItem(null)} title='Детали Ингредиента'>
+        <Modal closeModal={() => setCurrentItem(false)} title='Детали Ингредиента'>
           <IngredientDetails ingredient={currentItem} />
         </Modal>
       )}

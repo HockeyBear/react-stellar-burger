@@ -1,10 +1,13 @@
 import ingredientStyles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ConstructorContext, BunContext } from '../../../services/ComponentContext';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BUN } from '../../../utils/constants';
+import Modal from '../../modal/modal';
+import IngredientDetails from '../../ingredient-details/ingredient-details';
 
 const Ingredient = ({ item, onClick }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
   const { consturctorBun, setConstructorBun } = useContext(BunContext);
 
@@ -14,6 +17,7 @@ const Ingredient = ({ item, onClick }) => {
     } else {
       setConstructorBurgers([...constructorBurgers, item]);
     }
+    setIsModalOpen(true);
   }
 
   return (
@@ -25,6 +29,11 @@ const Ingredient = ({ item, onClick }) => {
         <CurrencyIcon type='primary' />
       </div>
       <p className={`text text_type_main-default`}>{item.name}</p>
+      {isModalOpen && (
+        <Modal closeModal={() => setIsModalOpen(false)} title='Детали Ингредиента'>
+          <IngredientDetails ingredient={item} />
+        </Modal>
+      )}
     </div>
   );
 };

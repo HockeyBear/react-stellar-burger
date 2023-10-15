@@ -24,7 +24,7 @@ const BurgerConstructor = () => {
     }, 0) : 0;
     const bunPrice = consturctorBun? consturctorBun.price * 2 : 0;
     return burgerPrice + bunPrice;
-  }, [consturctorBun, constructorBurgers]);
+  }, [consturctorBun, constructorBurgers]) || 0;
 
   const orderClick = () => {
     const burger = constructorBurgers.map(item => item._id);

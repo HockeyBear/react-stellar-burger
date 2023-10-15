@@ -3,10 +3,10 @@ import orderAccept from '../../images/done.svg';
 import PropTypes from 'prop-types';
 
 
-const OrderDetails = (item) => {
+const OrderDetails = (order) => {
   return (
     <div className={`${orderStyle.con} pb-30 pt-4 pl-25 pr-25`}>
-      <h2 className={`${orderStyle.text} text text_type_digits-large mb-8`}>{item.order.number}</h2>
+      <h2 className={`${orderStyle.text} text text_type_digits-large mb-8`}>{order.order.number}</h2>
       <p className={"text text_type_main-medium"}>
         идентификатор заказа
       </p>
@@ -22,7 +22,7 @@ const OrderDetails = (item) => {
 }
 
 OrderDetails.propTypes = {
-  item: PropTypes.number.isRequired
+  order: PropTypes.object.isRequired
 }
 
 export default OrderDetails;
