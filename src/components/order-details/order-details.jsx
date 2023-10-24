@@ -1,11 +1,12 @@
 import orderStyle from './order-details.module.css';
 import orderAccept from '../../images/done.svg';
+import PropTypes from 'prop-types';
 
 
-const OrderDetails = () => {
+const OrderDetails = (order) => {
   return (
     <div className={`${orderStyle.con} pb-30 pt-4 pl-25 pr-25`}>
-      <h2 className={`${orderStyle.text} text text_type_digits-large mb-8`}>034536</h2>
+      <h2 className={`${orderStyle.text} text text_type_digits-large mb-8`}>{order.order.number}</h2>
       <p className={"text text_type_main-medium"}>
         идентификатор заказа
       </p>
@@ -18,6 +19,10 @@ const OrderDetails = () => {
       </p>
     </div>
   )
+}
+
+OrderDetails.propTypes = {
+  order: PropTypes.object.isRequired
 }
 
 export default OrderDetails;

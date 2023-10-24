@@ -1,15 +1,21 @@
-import { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useContext } from "react";
 import ingStyles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import ingredientPropType from '../../utils/prop-types';
-import PropTypes from 'prop-types';
+// import ingredientPropType from '../../utils/prop-types';
+// import PropTypes from 'prop-types';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Ingredient from "./ingredient/ingredient";
+import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
+import { BUN, SAUCE, FILLING } from "../../utils/constants";
 
-const BurgerIngredients = (ingredient) => {
+const BurgerIngredients = () => {
   const [current, setCurrent] = useState('bun');
-  const [currentItem, setCurrentItem] = useState(null)
+  const [currentItem, setCurrentItem] = useState(false)
+
+  const { data } = useContext(IngredientsContext);
+  // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
+  // const { consturctorBun, setConstructorBun } = useContext(BunContext);
 
   const refIng = {
     'bun': useRef(null),
@@ -25,17 +31,17 @@ const BurgerIngredients = (ingredient) => {
   };
 
   const bun = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'bun');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'bun');
+  }, [data]);
   const sauce = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'sauce');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'sauce');
+  }, [data]);
   const filling = useMemo(() => {
-    return ingredient.data.filter(item => item.type === 'main');
-  }, [ingredient]);
+    return data.filter(item => item.type === 'main');
+  }, [data]);
 
   return (
-    <>
+      <>
       <section className={ingStyles.section}>
         <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
         <div className={`${ingStyles.tab} pt-5 pb-10`}>
@@ -63,7 +69,7 @@ const BurgerIngredients = (ingredient) => {
         </div>
         <div className={ingStyles.ingredients}>
           <div className={`${ingStyles.ingredient} custom-scroll`}>
-            <h2 className="text text_type_main-medium" ref={refIng["bun"]}>
+            <h2 className="text text_type_main-medium" ref={refIng[BUN]}>
               Булки
             </h2>
             <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
@@ -75,7 +81,7 @@ const BurgerIngredients = (ingredient) => {
                 />
               ))}
             </div>
-            <h2 className="text text_type_main-medium" ref={refIng["sauce"]}>
+            <h2 className="text text_type_main-medium" ref={refIng[SAUCE]}>
               Соусы
             </h2>
             <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
@@ -87,7 +93,7 @@ const BurgerIngredients = (ingredient) => {
                 />
               ))}
             </div>
-            <h2 className="text text_type_main-medium" ref={refIng["filling"]}>
+            <h2 className="text text_type_main-medium" ref={refIng['filling']}>
               Начинки
             </h2>
             <div className={`${ingStyles.ingredient_con} pt-6 pl-4 pb-10`}>
@@ -103,7 +109,7 @@ const BurgerIngredients = (ingredient) => {
         </div>
       </section>
       {currentItem && (
-        <Modal closeModal={() => setCurrentItem(null)} title='Детали Ингредиента'>
+        <Modal closeModal={() => setCurrentItem(false)} title='Детали Ингредиента'>
           <IngredientDetails ingredient={currentItem} />
         </Modal>
       )}
@@ -111,8 +117,8 @@ const BurgerIngredients = (ingredient) => {
   )
 }
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired
-};
+// BurgerIngredients.propTypes = {
+//   data: PropTypes.arrayOf(ingredientPropType).isRequired
+// };
 
 export default BurgerIngredients;

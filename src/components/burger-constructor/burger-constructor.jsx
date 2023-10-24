@@ -1,103 +1,115 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import constructorStyles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import ingredientPropType from '../../utils/prop-types';
-import PropTypes from 'prop-types';
+// import ingredientPropType from '../../utils/prop-types';
+// import PropTypes from 'prop-types';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
+import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
+import { BASE_URL } from "../../utils/constants";
+import { checkResponse } from "../../utils/API";
 
-const BurgerConstructor = ({ data }) => {
-  const [order, setOrder] = useState(false);
-  
-  const totalPrice = data.reduce((sum, item) => sum + item.price, 0);
+const BurgerConstructor = () => {
+  const { ingredientsData } = useContext(IngredientsContext);
+  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
+  const { consturctorBun, setConstructorBun } = useContext(BunContext);
+  const [order, setOrder] = useState();
+  const [modalOrder, setModalOrder] = useState(false);
 
-  const bun = useMemo(() => {
-    return data && data.find((item) => item.type === 'bun');
-  }, [data]);
-  const sauce = useMemo(() => {
-    return data && data.find(item => item.type === 'sauce')
-  }, [data]);
-  const main = useMemo(() => {
-    return data && data.filter(item => item.type === 'filling')
-  }, [data]);
+  const hasSelectedBun = consturctorBun !== null;
 
-  const RenderedIngredient = (item, type) => {
+  const totalPrice = useMemo(() => {
+    const burgerPrice = constructorBurgers? constructorBurgers.reduce((sum, curr) => {
+      return sum + curr.price;
+    }, 0) : 0;
+    const bunPrice = consturctorBun? consturctorBun.price * 2 : 0;
+    return burgerPrice + bunPrice;
+  }, [consturctorBun, constructorBurgers]) || 0;
+
+  const orderClick = () => {
+    const burger = constructorBurgers.map(item => item._id);
+    burger.push(consturctorBun._id);
+    return fetch(`${BASE_URL}/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ingredients: burger
+      })
+      
+    }).then(result => checkResponse(result))
+      .then(result => {
+        setOrder(result.order);
+        setModalOrder(true);
+      })
+      .catch(error => {
+        console.log('Произошла ошибка при отправке запроса:', error.message);
+        alert('Произошла ошибка при отправке запроса. Пожалуйста, попробуйте еще раз.');
+      });
+  }
+
+  const RenderedIngredient = (item) => {
     return (
       <div key={item._id}>
         <DragIcon type="primary" />
-        <ConstructorElement text={type.name} price={type.price} thumbnail={type.image} />
+        <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
       </div>
     )
   }
 
   return (
-    <>
-      <section className={constructorStyles.section}>
-        <div
-          className={constructorStyles.container + " custom-scroll mt-25 pl-4"}
-        >
-          <div className={constructorStyles.ingredientCon}>
-            {bun && (
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={bun.name + "(верх)"}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
-            )}
+      <>
+        <section className={constructorStyles.section}>
+          <div className={constructorStyles.ingredientCon + " mt-25"}>
+            {hasSelectedBun && <ConstructorElement 
+            type="top" 
+            isLocked={true}
+            text={consturctorBun.name + "(верх)"}
+            price={consturctorBun.price}
+            thumbnail={consturctorBun.image}
+            />}
           </div>
-          <div className={constructorStyles.ingredientCon}>
-            <DragIcon type="primary" />
-            {bun && (
-              <ConstructorElement
-                text={sauce.name}
-                price={sauce.price}
-                thumbnail={sauce.image}
-              />
-            )}
-          </div>
-          {main.map((item) => (
-            <RenderedIngredient key={item._id} {...item} />
-          ))}
-          <div className={constructorStyles.ingredientCon}>
-            {bun && (
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={bun.name + "(низ)"}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
-            )}
-          </div>
-        </div>
-        <div className={constructorStyles.order + " mt-10 mr-4"}>
-          <div className={constructorStyles.sum}>
-            <p className="text text_type_main-large">{totalPrice}</p>
-            <CurrencyIcon type="primary" />
-          </div>
-          <Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            onClick={() => setOrder(true)}
+          <div
+            className={constructorStyles.container + " custom-scroll pl-4"}
           >
-            Оформить заказ
-          </Button>
-        </div>
-      </section>
-      {order && (
-        <Modal closeModal={() => setOrder(false)}>
-          <OrderDetails />
-        </Modal>
-      )}
-    </>
+            {constructorBurgers.map((item, index) => <RenderedIngredient key={index} {...item} />)}
+          </div>
+          <div className={`${constructorStyles.ingredientCon} ${constructorStyles.lastIngredientCon}`}>
+            {hasSelectedBun && <ConstructorElement 
+            type="bottom" 
+            isLocked={true}
+            text={consturctorBun.name + "(низ)"}
+            price={consturctorBun.price}
+            thumbnail={consturctorBun.image}
+            />}
+          </div>
+          <div className={constructorStyles.order + " mt-10 mr-4"}>
+            <div className={constructorStyles.sum}>
+              <p className="text text_type_main-large">{totalPrice}</p>
+              <CurrencyIcon type="primary" />
+            </div>
+            <Button
+              htmlType="button"
+              type="primary"
+              size="large"
+              onClick={() => orderClick()}
+            >
+              Оформить заказ
+            </Button>
+          </div>
+        </section>
+        {modalOrder && (
+          <Modal closeModal={() => setModalOrder(false)}>
+            <OrderDetails order={order} />
+          </Modal>
+        )}
+      </>
   );
 }
 
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired,
-}
+// BurgerConstructor.propTypes = {
+//   data: PropTypes.arrayOf(ingredientPropType).isRequired,
+// }
 
 export default BurgerConstructor;

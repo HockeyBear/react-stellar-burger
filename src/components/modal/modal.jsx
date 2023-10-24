@@ -27,7 +27,10 @@ const Modal = ({ closeModal, children, title }) => {
       <div className={modalStyles.con}>
           <div className={`${modalStyles.text} pt-10 pr-10 pl-10`}>
             <h2 className={'text text_type_main-large'}>{title}</h2>
-            <button type="button" className={modalStyles.closeButton} onClick={closeModal}>
+            <button type="button" className={modalStyles.closeButton} onClick={(e) => {
+              e.stopPropagation();
+              closeModal();
+            }}>
               <CloseIcon type="primary" />
             </button>
           </div>

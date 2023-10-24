@@ -1,6 +1,6 @@
 .section {
   width: 600px;
-  height: 912px;
+  height: 860px;
 }
 
 .container {
@@ -10,6 +10,7 @@
   overflow: scroll;
   overflow-x: hidden;
   padding-right: 8px;
+  max-height: calc(100vh - 515px);
 }
 
 .ingredientCon {
@@ -18,6 +19,11 @@
   align-items: center;
   justify-content: end;
   column-gap: 13px;
+  padding: 0 24px 10px 0;
+}
+
+.lastIngredientCon {
+  padding: 10px 24px 0 0;
 }
 
 .order {
