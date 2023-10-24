@@ -41,7 +41,6 @@ const BurgerIngredients = () => {
   }, [data]);
 
   return (
-    <IngredientsContext.Provider value={data}>
       <>
       <section className={ingStyles.section}>
         <h2 className="text text_type_main-large pt-10">Соберите бургер</h2>
@@ -115,7 +114,6 @@ const BurgerIngredients = () => {
         </Modal>
       )}
     </>
-    </IngredientsContext.Provider>
   )
 }
 

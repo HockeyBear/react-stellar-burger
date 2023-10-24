@@ -59,7 +59,6 @@ const BurgerConstructor = () => {
   }
 
   return (
-    <IngredientsContext.Provider value={ingredientsData}>
       <>
         <section className={constructorStyles.section}>
           <div className={constructorStyles.ingredientCon + " mt-25"}>
@@ -106,7 +105,6 @@ const BurgerConstructor = () => {
           </Modal>
         )}
       </>
-    </IngredientsContext.Provider>
   );
 }
 
