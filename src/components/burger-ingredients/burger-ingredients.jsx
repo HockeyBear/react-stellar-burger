@@ -6,14 +6,35 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Ingredient from "./ingredient/ingredient";
+import { useDispatch, useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import { GET_CURRENT_INGREDIENT, MODAL_OPEN, MODAL_OPEN_INGREDIENT, MODAL_CLOSE_INGREDIENT, DELETE_CURRENT_INGREDIENT } from "../../services/actions";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
 import { BUN, SAUCE, FILLING } from "../../utils/constants";
 
+const Component = () => {
+  const { ref, inView, entry } = useInView({
+    threshold: 1,
+  })
+}
+
 const BurgerIngredients = () => {
-  const [current, setCurrent] = useState('bun');
+
+  const Tabs = useMemo(() => {
+    return {
+      BUN: 'bun',
+      SAUCE:'sauce',
+      FILLING: 'main'
+    }
+  }, []);
+
+  const [current, setCurrent] = useState(Tabs.BUN);
+  const dispatch = useDispatch();
+
   const [currentItem, setCurrentItem] = useState(false)
 
-  const { data } = useContext(IngredientsContext);
+  const data = useSelector(state => state.renderedIngredient.ingredients);
+  const modalIngredient = useSelector(state => state.)
   // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
   // const { consturctorBun, setConstructorBun } = useContext(BunContext);
 

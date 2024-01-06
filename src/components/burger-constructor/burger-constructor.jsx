@@ -1,8 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import constructorStyles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-// import ingredientPropType from '../../utils/prop-types';
-// import PropTypes from 'prop-types';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
