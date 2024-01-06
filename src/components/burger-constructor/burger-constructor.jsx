@@ -8,9 +8,10 @@ import { BASE_URL } from "../../utils/constants";
 import { checkResponse } from "../../utils/API";
 
 const BurgerConstructor = () => {
-  const { ingredientsData } = useContext(IngredientsContext);
-  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
-  const { consturctorBun, setConstructorBun } = useContext(BunContext);
+  // const { ingredientsData } = useContext(IngredientsContext);
+
+  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext) || { constructorBurgers:[], setConstructorBurgers:null };
+  const { consturctorBun, setConstructorBun } = useContext(BunContext) || { consturctorBun:null, setConstructorBun:null };
   const [order, setOrder] = useState();
   const [modalOrder, setModalOrder] = useState(false);
 

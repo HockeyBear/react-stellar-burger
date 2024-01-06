@@ -1,4 +1,7 @@
-import { GET_INGREDIENTS_FAILED, GET_INGREDIENTS_REQUIRED, GET_INGREDIENTS_SUCCESS } from "../actions";
+import { GET_INGREDIENTS_FAILED, 
+  GET_INGREDIENTS_REQUIRED, 
+  GET_INGREDIENTS_SUCCESS } 
+  from "../ingredients/ingredients-actions";
 
 const initIngredients = {
   ingredients: [],
@@ -7,7 +10,7 @@ const initIngredients = {
 }
 
 export const renderedIngredientReducer = (state = initIngredients, action) => {
-  console.log('renderedIngredientReducer', action.type, state);
+  // console.log('renderedIngredientReducer', action.type, state);
   switch (action.type) {
     case GET_INGREDIENTS_REQUIRED: {
       return {

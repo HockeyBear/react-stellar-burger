@@ -11,6 +11,7 @@ import { useInView } from "react-intersection-observer";
 import { GET_CURRENT_INGREDIENT, MODAL_OPEN, MODAL_OPEN_INGREDIENT, MODAL_CLOSE_INGREDIENT, DELETE_CURRENT_INGREDIENT } from "../../services/actions";
 import { ConstructorContext, IngredientsContext, BunContext } from "../../services/ComponentContext";
 import { BUN, SAUCE, FILLING } from "../../utils/constants";
+import { renderedIngredientData } from "../../services/ingredients/ingredients-selectors";
 
 const Component = () => {
   const { ref, inView, entry } = useInView({
@@ -33,8 +34,9 @@ const BurgerIngredients = () => {
 
   const [currentItem, setCurrentItem] = useState(false)
 
-  const data = useSelector(state => state.renderedIngredient.ingredients);
-  const modalIngredient = useSelector(state => state.)
+  const data = useSelector(renderedIngredientData);
+  console.log(data)
+  // const modalIngredient = useSelector(state => state.modalInfoIngredient.currentIngredient);
   // const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
   // const { consturctorBun, setConstructorBun } = useContext(BunContext);
 

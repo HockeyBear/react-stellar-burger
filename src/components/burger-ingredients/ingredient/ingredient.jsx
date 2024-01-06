@@ -8,8 +8,11 @@ import IngredientDetails from '../../ingredient-details/ingredient-details';
 
 const Ingredient = ({ item, onClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext);
-  const { consturctorBun, setConstructorBun } = useContext(BunContext);
+  
+  // todo - тут ошибка деструктуризации если ConstructorContext = null - данная строка уйдет когда переделаешь на store
+  const { constructorBurgers, setConstructorBurgers } = useContext(ConstructorContext) || { constructorBurgers:[], setConstructorBurgers:null };
+// todo - тут ошибка деструктуризации если BunContext = null - данная строка уйдет когда переделаешь на store
+  const { consturctorBun, setConstructorBun } = useContext(BunContext) || { consturctorBun:null, setConstructorBun:null };
 
   const clickIngredient = (item) => {
     if (item.type === BUN) {
